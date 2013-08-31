@@ -1,0 +1,53 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tests assistant</title>
+    <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
+    <link href="{% static "css/app.css" %}" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="navbar navbar-default" role="navigation">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">Tests Assistant</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="/test/add">Add Test</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </nav>
+    <div class="container">
+      <div class="col-md-6 col-md-offset-3">
+	<h2>Keywords <small>Further filter tests</small></h2>
+	<div class="tags">
+	  {% for current in all_tags %}
+	  <a href="/test/filter?tags={% for tag in tags %}{{ tag.pk }},{% endfor %}{{ current.pk }}" class="label {% if current in tags %}label-success{% else %}label-primary{% endif %}">{% if current in tags %}{% else %}<span class="glyphicon glyphicon-plus"></span> {% endif %}{{ current.name }}</a>
+	  {% endfor %}
+	</div>	
+      </div>
+      <div class="col-md-6 col-md-offset-3">
+	<h2>{{ count }} tests match</h2>
+	<ul>
+	  {% for test in tests %}
+	  <li><a href="/test/detail/{{ test.pk }}">{{ test.title }}</a></li>
+	  {% endfor %}
+	</ul>
+	<ul class="pager">
+	  {% if page.has_previous %}
+	  <li><a href="/test/filter?tags={% for tag in tags %}{{ tag.pk }},{% endfor %}&page={{ page.previous_page_number }}">Previous</a></li>
+	  {% endif %}
+	  {% if page.has_next %}
+	  <li><a href="/test/filter?tags={% for tag in tags %}{{ tag.pk }},{% endfor %}&page={{ page.next_page_number }}">Next</a></li>
+	  {% endif %}
+	</ul>
+      </div>
+    </div>
+    <script src="{% static "js/bootstrap.js" %}"></script>
+  </body>
+</html>

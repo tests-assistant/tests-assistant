@@ -1,0 +1,29 @@
+@font-face {
+  font-family: DroidSerif;
+  src: url("../fonts/DroidSerif.ttf");
+}
+
+@font-face {
+  font-family: LeagueGothic;
+  src: url("../fonts/LeagueGothic-Regular.otf");
+}
+
+body {
+  color: #3C3C3C;
+  margin: 0px;
+  background: url("../images/background.png");
+  font-size: 24px;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: LeagueGothic, 'Liberation Sans', "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: black;
+  font-weight: normal;
+}
+
+.navbar-brand {
+    font-size: 32px;
+  font-family: LeagueGothic, 'Liberation Sans', "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: black;
+  font-weight: normal;
+}
