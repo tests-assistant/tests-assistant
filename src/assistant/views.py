@@ -48,21 +48,19 @@ def test_detail(request, pk):
 
 
 def test_edit(request, pk):
+    test = Test.objects.get(pk=pk)
     if request.method == 'POST':
         form = EditTest(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            test = Test(
-                title=data['title'],
-                description=data['description'],
-                html=markdown(data['description'])
-            )
+            test.title = data['title']
+            test.description = data['description']
+            test.html = markdown(data['description'])
             test.save()
             test.tags.clear()
             for tag in map(lambda x: x.lower(), data['tags'].split()):
                 test.tags.add(tag)
             return redirect('/test/detail/%s' % test.pk)
-    test = Test.objects.get(pk=pk)
     form = EditTest()
     ctx = dict(test=test, form=form)
     return render(request, 'assistant/test/add.html', ctx)
