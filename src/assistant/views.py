@@ -33,7 +33,7 @@ def test_add(request):
                 html=markdown(data['description'])
             )
             test.save()
-            for tag in data['tags'].split():
+            for tag in map(lambda x: x.lower(), data['tags'].split()):
                 test.tags.add(tag)
             return redirect('/test/detail/%s' % test.id)
     form = EditTest()
@@ -45,6 +45,27 @@ def test_detail(request, pk):
     test = Test.objects.get(pk=pk)
     ctx = dict(test=test)
     return render(request, 'assistant/test/detail.html', ctx)
+
+
+def test_edit(request, pk):
+    if request.method == 'POST':
+        form = EditTest(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            test = Test(
+                title=data['title'],
+                description=data['description'],
+                html=markdown(data['description'])
+            )
+            test.save()
+            test.tags.clear()
+            for tag in map(lambda x: x.lower(), data['tags'].split()):
+                test.tags.add(tag)
+            return redirect('/test/detail/%s' % test.pk)
+    test = Test.objects.get(pk=pk)
+    form = EditTest()
+    ctx = dict(test=test, form=form)
+    return render(request, 'assistant/test/add.html', ctx)
 
 
 def test_filter(request):
