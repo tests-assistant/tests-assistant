@@ -12,7 +12,7 @@ body {
   color: #3C3C3C;
   margin: 0px;
   background: url("../images/background.png");
-  font-size: 24px;
+  font-size: 18px;
 }
 
 h1, h2, h3, h4, h5 {
@@ -33,4 +33,11 @@ h1, h2, h3, h4, h5 {
     margin-bottom: 10px;
     line-height: 1.8em;
     text-align: justify;
+}
+
+.description {
+    background: white;
+    border: 3px solid #DADADA;
+    padding: 10px;
+    border-radius: 3px;
 }
