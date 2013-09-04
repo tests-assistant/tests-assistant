@@ -66,6 +66,15 @@ def test_edit(request, pk):
     return render(request, 'assistant/test/add.html', ctx)
 
 
+def test_delete(request, pk):
+    test = Test.objects.get(pk=pk)
+    if request.method == 'POST':
+        test.delete()
+        return redirect('/')
+    ctx = dict(test=test)
+    return render(request, 'assistant/test/delete.html', ctx)
+
+
 def test_filter(request):
     pks = request.GET.get('tags', None)
     if not pks:
