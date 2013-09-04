@@ -175,3 +175,4 @@ LOGGING = {
 
 
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
