@@ -34,8 +34,8 @@
 	    <textarea name="description" class="form-control" placeholder="Description">{{ test.description }}</textarea>
 	  </div>
 	  <div class="form-group">
-	    <textarea name="tags" class="form-control" placeholder="Keywords">{% for tag in test.tags.names %}{{ tag }} {% endfor %}</textarea>
 	    <p class="help-block"><small>Separate keywords with space. <b>Don't create new keywords unless it's needed.</b> Be carful and use the exact same orthography. Refer yourself to the full list of keywords that can be found in the <a href="/">frontpage</a>.<small></p>
+	    <textarea name="tags" class="form-control" placeholder="Keywords">{% for tag in test.tags.names %}{{ tag }} {% endfor %}</textarea>
 	  </div>
 	  <button type="submit" class="btn btn-primary btn-block">Submit</button>
 	</form>
