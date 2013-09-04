@@ -11,4 +11,5 @@ urlpatterns = patterns('',
     url(r'^test/detail/(\d+)$', 'assistant.views.test_detail'),
     url(r'^test/delete/(\d+)$', 'assistant.views.test_delete'),
     url(r'^test/filter$', 'assistant.views.test_filter'),
+    url(r'^search/', include('haystack.urls')),
 )

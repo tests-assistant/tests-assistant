@@ -9,3 +9,6 @@ class Test(models.Model):
     html = models.TextField()
 
     tags = TaggableManager()
+
+    def get_absolute_url(self):
+        return '/test/detail/%s' % self.pk
