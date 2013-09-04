@@ -8,7 +8,7 @@
     <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
     <link href="{% static "css/app.css" %}" rel="stylesheet">
   </head>
-  <body>
+  <body class="test-add">
     <nav class="navbar navbar-default" role="navigation">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
@@ -22,32 +22,17 @@
         </ul>
       </div><!-- /.navbar-collapse -->
     </nav>
+    <script src="{% static "js/bootstrap.js" %}"></script>
     <div class="container">
       <div class="col-md-6 col-md-offset-3">
-	<h1>Keywords <small>Select a keyword to filter with</small></h1>
-	<div class="tags">
-	  {% for tag in tags %}
-	  <a href="/test/filter?tags={{ tag.pk }}" class="label label-primary"><span class="glyphicon glyphicon-plus"></span> {{ tag.name }}</a>
-	  {% endfor %}
-	</div>	
-      </div>
-      <div class="col-md-6 col-md-offset-3">
-	<h1>{{ count }} tests</h1>
-	<ul>
-	  {% for test in tests %}
-	  <li><a href="/test/detail/{{ test.pk }}">{{ test.title }}</a></li>
-	  {% endfor %}
-	</ul>
-	<ul class="pager">
-	  {% if page.has_previous %}
-	  <li><a href="?page={{ page.previous_page_number }}">Previous</a></li>
-	  {% endif %}
-	  {% if page.has_next %}
-	  <li><a href="?page={{ page.next_page_number }}">Next</a></li>
-	  {% endif %}
-	</ul>
+	<form method="POST">
+	  {% csrf_token %}
+	  <div class="form-group">
+	    <input id="title" name="title" type="text" class="form-control" placeholder="Title" value="{{ test.title }}">
+	  </div>
+	  <button type="submit" class="btn btn-primary btn-block">Submit</button>
+	</form>
       </div>
     </div>
-    <script src="{% static "js/bootstrap.js" %}"></script>
   </body>
 </html>

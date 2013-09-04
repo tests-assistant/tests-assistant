@@ -57,3 +57,17 @@ body.test-add #title {
 body.test-add #description {
     height: 250px;
 }
+
+#add-this {
+    margin-bottom: 10px;
+}
+
+#result {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+#result form {
+    display: inline-block;
+}

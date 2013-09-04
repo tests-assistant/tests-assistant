@@ -12,3 +12,17 @@ class Test(models.Model):
 
     def get_absolute_url(self):
         return '/test/detail/%s' % self.pk
+
+
+class Run(models.Model):
+    title = models.CharField(max_length=255)
+    tests = models.ManyToManyField(Test, through='TestInstance')
+
+
+class TestInstance(models.Model):
+    test = models.ForeignKey(Test)
+    run = models.ForeignKey(Run)
+    success = models.BooleanField()
+
+    started_at = models.DateTimeField(null=True)
+    ended_at = models.DateTimeField(null=True)
