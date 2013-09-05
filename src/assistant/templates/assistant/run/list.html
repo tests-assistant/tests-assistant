@@ -8,7 +8,7 @@
     <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
     <link href="{% static "css/app.css" %}" rel="stylesheet">
   </head>
-  <body class="test-add">
+  <body>
     <nav class="navbar navbar-default" role="navigation">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
@@ -22,24 +22,24 @@
         </ul>
       </div><!-- /.navbar-collapse -->
     </nav>
-    <script src="{% static "js/bootstrap.js" %}"></script>
     <div class="container">
       <div class="col-md-6 col-md-offset-3">
-	<form method="POST">
-	  {% csrf_token %}
-	  <div class="form-group">
-	    <input id="title" name="title" type="text" class="form-control" placeholder="Title" value="{{ test.title }}">
-	  </div>
-	  <div class="form-group">
-	    <textarea id="description" name="description" class="form-control" placeholder="Description">{{ test.description }}</textarea>
-	  </div>
-	  <div class="form-group">
-	    <p class="help-block">Separate keywords with space. <b>Don't create new keywords unless it's needed.</b> Be carful and use the exact same orthography. Refer yourself to the full list of keywords that can be found in the <a href="/">frontpage</a>.</p>
-	    <textarea name="tags" class="form-control" placeholder="Keywords">{% for tag in test.tags.names %}{{ tag }} {% endfor %}</textarea>
-	  </div>
-	  <button type="submit" class="btn btn-primary btn-block">Submit</button>
-	</form>
+	<h1>{{ count }} runs</h2>
+	<ul>
+	  {% for run in page.object_list %}
+	  <li><a href="/run/detail/{{ run.pk }}">{{ run.title }}</a></li>
+	  {% endfor %}
+	</ul>
+	<ul class="pager">
+	  {% if page.has_previous %}
+	  <li><a href="/run/list?page={{ page.previous_page_number }}">Previous</a></li>
+	  {% endif %}
+	  {% if page.has_next %}
+	  <li><a href="/run/list?page={{ page.next_page_number }}">Next</a></li>
+	  {% endif %}
+	</ul>
       </div>
     </div>
+    <script src="{% static "js/bootstrap.js" %}"></script>
   </body>
 </html>

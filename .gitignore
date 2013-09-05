@@ -1,6 +1,7 @@
 *.py[cod]
 *~
 src/db.sqlite
+whoosh_index/
 
 # C extensions
 *.so

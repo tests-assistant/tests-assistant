@@ -18,21 +18,27 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav">
-          <li><a href="/test/add">Add Test</a></li>
+	  {% include "assistant/navigation.html" %}
         </ul>
       </div><!-- /.navbar-collapse -->
     </nav>
     <div class="container">
       <div class="col-md-6 col-md-offset-3">
-	<h2>Keywords <small>Further filter tests</small></h2>
+	<h1>Keywords <small>Further filter tests</small></h1>
 	<div class="tags">
-	  {% for current in all_tags %}
-	  <a href="/test/filter?tags={% for tag in tags %}{{ tag.pk }},{% endfor %}{{ current.pk }}" class="label {% if current in tags %}label-success{% else %}label-primary{% endif %}">{% if current in tags %}{% else %}<span class="glyphicon glyphicon-plus"></span> {% endif %}{{ current.name }}</a>
+	  {% for current_tag in all_tags %}
+	  <a href="/test/filter?tags={% for tag in tags %}{{ tag.pk }},{% endfor %}{{ current_tag.pk }}" class="label {% if current_tag in tags %}label-success{% else %}label-primary{% endif %}">{% if current_tag in tags %}{% else %}<span class="glyphicon glyphicon-plus"></span> {% endif %}{{ current_tag.name }}</a>
 	  {% endfor %}
 	</div>	
       </div>
       <div class="col-md-6 col-md-offset-3">
-	<h2>{{ count }} tests match</h2>
+	<h1>{{ count }} tests match</h1>
+	{% if current %}
+	  <form method="POST" id="add-this">
+	    {% csrf_token %}
+	    <button class="btn btn-block btn-default">Add all this tests to the current run</button>
+	  </form>
+	{% endif %}
 	<ul>
 	  {% for test in tests %}
 	  <li><a href="/test/detail/{{ test.pk }}">{{ test.title }}</a></li>

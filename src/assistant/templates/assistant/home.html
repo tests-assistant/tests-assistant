@@ -18,13 +18,13 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav">
-          <li><a href="/test/add">Add Test</a></li>
+	  {% include "assistant/navigation.html" %}
         </ul>
       </div><!-- /.navbar-collapse -->
     </nav>
     <div class="container">
       <div class="col-md-6 col-md-offset-3">
-	<h2>Keywords <small>Select a keyword to filter with</small></h2>
+	<h1>Keywords <small>Select a keyword to filter with</small></h1>
 	<div class="tags">
 	  {% for tag in tags %}
 	  <a href="/test/filter?tags={{ tag.pk }}" class="label label-primary"><span class="glyphicon glyphicon-plus"></span> {{ tag.name }}</a>
@@ -32,7 +32,7 @@
 	</div>	
       </div>
       <div class="col-md-6 col-md-offset-3">
-	<h2>{{ count }} tests</h2>
+	<h1>{{ count }} tests</h1>
 	<ul>
 	  {% for test in tests %}
 	  <li><a href="/test/detail/{{ test.pk }}">{{ test.title }}</a></li>

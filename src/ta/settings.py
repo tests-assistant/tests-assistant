@@ -132,10 +132,18 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'concurrent_server',
 
+    'haystack',
     'assistant',
     'taggit',
 
 )
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(ROOT, 'whoosh_index'),
+    },
+}
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -165,3 +173,7 @@ LOGGING = {
         },
     }
 }
+
+
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
