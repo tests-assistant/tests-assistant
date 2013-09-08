@@ -172,7 +172,7 @@ def run_detail(request, pk):
     not_run_count = instances.filter(ended_at__isnull=True).count()
     # compute total time
     total_time = timedelta()
-    for i in TestInstance.objects.filter(ended_at__isnull=False, started_at__isnull=False):
+    for i in instances.filter(ended_at__isnull=False, started_at__isnull=False):
         total_time = i.ended_at - i.started_at + total_time
     ctx = dict(run=run, current=current, count=count, page=page, not_run_count=not_run_count, total_time=total_time)
     return render(request, 'assistant/run/detail.html', ctx)
