@@ -217,7 +217,6 @@ def stats(request):
     xaxis = range(len(xdata))
     match = zip(xaxis, xdata)
 
-    print xdata, ydata1, ydata2, ydata3
     chartdata = {
         'x': xaxis,
         'name1': 'passed', 'y1': ydata1,
