@@ -2,6 +2,7 @@
 *~
 src/db.sqlite
 whoosh_index/
+backup/
 
 # C extensions
 *.so

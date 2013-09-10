@@ -29,6 +29,7 @@
 	  {% csrf_token %}
 	  <div class="form-group">
 	    <input id="title" name="title" type="text" class="form-control" placeholder="Title" value="{{ test.title }}">
+	    <input id="version" name="version" type="text" class="form-control" placeholder="Version" value="{{ test.version }}">
 	  </div>
 	  <button type="submit" class="btn btn-primary btn-block">Submit</button>
 	</form>

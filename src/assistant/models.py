@@ -16,6 +16,7 @@ class Test(models.Model):
 
 class Run(models.Model):
     title = models.CharField(max_length=255)
+    version = models.CharField(max_length=255)
     tests = models.ManyToManyField(Test, through='TestInstance')
 
 

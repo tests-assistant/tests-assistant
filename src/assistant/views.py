@@ -148,6 +148,7 @@ def run_add(request):
             data = form.cleaned_data
             run = Run(
                 title=data['title'],
+                version=data['version'].lower(),
             )
             run.save()
             return redirect('/run/detail/%s' % run.pk)
