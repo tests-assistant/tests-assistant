@@ -20,12 +20,12 @@ from .models import TestInstance
 
 def home(request):
     count = Test.objects.all().count()
-    paginator = Paginator(Test.objects.all(), 30)
+    paginator = Paginator(Test.objects.all().order_by('title'), 30)
     num_page = int(request.GET.get('page', 1))
     if num_page > paginator.num_pages:
         return redirect('/')
     page = paginator.page(num_page)
-    tags = Test.tags.all()
+    tags = Test.tags.all().order_by('name')
     ctx = dict(page=page, tests=page.object_list, tags=tags, count=count)
     return render(request, 'assistant/home.html', ctx)
 
