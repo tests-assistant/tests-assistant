@@ -8,6 +8,7 @@ from django.shortcuts import redirect
 from django.core.paginator import Paginator
 
 from taggit.models import Tag
+from chartit import DataPool, Chart
 
 from .forms import EditTest
 from .forms import EditRun
@@ -201,3 +202,31 @@ def run_run(request, pk):
     test = instance.test
     ctx = dict(run=run, instance=instance, count=count, done=done, test=test)
     return render(request, 'assistant/run/run.html', ctx)
+
+
+def stats(request):
+    instances = TestInstance.objects.all().order_by('run__version').distinct()
+
+    xdata = [e[0] for e in instances.values_list('run__version')]
+    ydata1 = [TestInstance.objects.all().filter(run__version=version, success=True).count() for version in xdata]
+
+    ydata2 = [TestInstance.objects.all().filter(run__version=version, success=False).count() for version in xdata]
+    ydata3 = [TestInstance.objects.all().filter(run__version=version).count() for version in xdata]
+
+    xaxis = range(len(xdata))
+    match = zip(xaxis, xdata)
+
+    print xdata, ydata1, ydata2, ydata3
+    chartdata = {
+        'x': xaxis,
+        'name1': 'passed', 'y1': ydata1,
+        'name2': 'failed', 'y2': ydata2,
+        'name3': 'total', 'y3': ydata3,
+    }
+    charttype = "lineWithFocusChart"
+    data = {
+        'charttype': charttype,
+        'chartdata': chartdata,
+        'match': match
+    }
+    return render(request, 'assistant/stats.html', data)

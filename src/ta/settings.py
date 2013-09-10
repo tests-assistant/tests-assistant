@@ -132,10 +132,11 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'concurrent_server',
 
+    'taggit',
+    'django_nvd3',
+
     'haystack',
     'assistant',
-    'taggit',
-
 )
 
 HAYSTACK_CONNECTIONS = {

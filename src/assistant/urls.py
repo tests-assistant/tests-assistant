@@ -15,5 +15,7 @@ urlpatterns = patterns('',
     url(r'^run/detail/(\d+)$', 'assistant.views.run_detail'),
     url(r'^run/list/$', 'assistant.views.run_list'),
     url(r'^run/detail/(\d+)/running$', 'assistant.views.run_run'),
+    url(r'^run/stats', 'assistant.views.stats'),
     url(r'^search/', include('haystack.urls')),
+
 )
