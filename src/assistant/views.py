@@ -97,11 +97,11 @@ def test_filter(request):
     pks = request.GET.get('tags', None)
     if not pks:
         return redirect('/')
-    all_tags = Test.tags.all()
+    all_tags = Test.tags.all().order_by('name')
     pks = map(int, [e for e in pks.split(',') if e])
     tags = map(lambda x: Tag.objects.get(pk=x), pks)
     # manually match all tests tagged like that
-    tests = Test.objects.all()
+    tests = Test.objects.all().order_by('title')
     for pk in pks:
         tests = tests.filter(tags__pk=pk)
     # fetch current if any and if it's POST and them to the run
