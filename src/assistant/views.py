@@ -152,6 +152,7 @@ def run_add(request):
                 version=data['version'].lower(),
             )
             run.save()
+            request.session['current'] = run.pk
             return redirect('/run/detail/%s' % run.pk)
     form = EditRun()
     ctx = dict(form=form)
