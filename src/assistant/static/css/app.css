@@ -46,7 +46,7 @@ h1, h2, h3, h4, h5 {
     font-size: 0.7em;
 }
 
-body.test-add #title {
+body.test-add #title, input[name="title"] {
   font-family: LeagueGothic, 'Liberation Sans', "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: black;
   font-weight: normal;
