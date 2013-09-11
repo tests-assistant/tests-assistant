@@ -28,7 +28,7 @@
 	<form method="POST">
 	  {% csrf_token %}
 	  <div class="form-group">
-	    <input id="title" name="title" type="text" class="form-control" placeholder="Title" value="{{ test.title }}">
+	    <input name="title" type="text" class="form-control" placeholder="Title" value="{{ test.title }}">
 	  </div>
 	  <div class="form-group">
 	    <textarea id="description" name="description" class="form-control" placeholder="Description">{{ test.description }}</textarea>
