@@ -26,6 +26,7 @@
     <div class="container">
       <div class="col-md-6 col-md-offset-3">
 	<h1>{{ run.title }}</h1>
+	<h2>{{ run.version }}</h2>
 	{% if not_run_count %}
 	  {% if not_run_count == count %}
 	    <a href="/run/detail/{{ run.pk }}/running"><button class="btn btn-success btn-block">Run this tests</button></a>

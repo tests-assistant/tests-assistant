@@ -8,6 +8,7 @@ from django.shortcuts import redirect
 from django.core.paginator import Paginator
 
 from taggit.models import Tag
+from chartit import DataPool, Chart
 
 from .forms import EditTest
 from .forms import EditRun
@@ -20,12 +21,12 @@ from .models import TestInstance
 
 def home(request):
     count = Test.objects.all().count()
-    paginator = Paginator(Test.objects.all(), 30)
+    paginator = Paginator(Test.objects.all().order_by('title'), 30)
     num_page = int(request.GET.get('page', 1))
     if num_page > paginator.num_pages:
         return redirect('/')
     page = paginator.page(num_page)
-    tags = Test.tags.all()
+    tags = Test.tags.all().order_by('name')
     ctx = dict(page=page, tests=page.object_list, tags=tags, count=count)
     return render(request, 'assistant/home.html', ctx)
 
@@ -97,11 +98,11 @@ def test_filter(request):
     pks = request.GET.get('tags', None)
     if not pks:
         return redirect('/')
-    all_tags = Test.tags.all()
+    all_tags = Test.tags.all().order_by('name')
     pks = map(int, [e for e in pks.split(',') if e])
     tags = map(lambda x: Tag.objects.get(pk=x), pks)
     # manually match all tests tagged like that
-    tests = Test.objects.all()
+    tests = Test.objects.all().order_by('title')
     for pk in pks:
         tests = tests.filter(tags__pk=pk)
     # fetch current if any and if it's POST and them to the run
@@ -148,8 +149,10 @@ def run_add(request):
             data = form.cleaned_data
             run = Run(
                 title=data['title'],
+                version=data['version'].lower(),
             )
             run.save()
+            request.session['current'] = run.pk
             return redirect('/run/detail/%s' % run.pk)
     form = EditRun()
     ctx = dict(form=form)
@@ -200,3 +203,30 @@ def run_run(request, pk):
     test = instance.test
     ctx = dict(run=run, instance=instance, count=count, done=done, test=test)
     return render(request, 'assistant/run/run.html', ctx)
+
+
+def stats(request):
+    instances = TestInstance.objects.all().order_by('run__version').distinct()
+
+    xdata = [e[0] for e in instances.values_list('run__version')]
+    ydata1 = [TestInstance.objects.all().filter(run__version=version, success=True).count() for version in xdata]
+
+    ydata2 = [TestInstance.objects.all().filter(run__version=version, success=False).count() for version in xdata]
+    ydata3 = [TestInstance.objects.all().filter(run__version=version).count() for version in xdata]
+
+    xaxis = range(len(xdata))
+    match = zip(xaxis, xdata)
+
+    chartdata = {
+        'x': xaxis,
+        'name1': 'passed', 'y1': ydata1,
+        'name2': 'failed', 'y2': ydata2,
+        'name3': 'total', 'y3': ydata3,
+    }
+    charttype = "lineWithFocusChart"
+    data = {
+        'charttype': charttype,
+        'chartdata': chartdata,
+        'match': match
+    }
+    return render(request, 'assistant/stats.html', data)

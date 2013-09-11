@@ -9,3 +9,4 @@ class EditTest(forms.Form):
 
 class EditRun(forms.Form):
     title = forms.CharField(max_length=255)
+    version = forms.CharField(max_length=255)
