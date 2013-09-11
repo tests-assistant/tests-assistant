@@ -129,14 +129,12 @@ def run_add(request):
     if request.method == 'POST':
         form = EditRun(request.POST)
         if form.is_valid():
-            data = form.cleaned_data
-            run = Run(
-                title=data['title'],
-                version=data['version'].lower(),
-            )
+            run = form.save(commit=False)  # solely for making version into smaller case 
+            run.version = run.version.lower()
             run.save()
             request.session['current'] = run.pk
             return redirect('/run/detail/%s' % run.pk)
+
     form = EditRun()
     ctx = dict(form=form)
     return render(request, 'assistant/run/edit.html', ctx)
