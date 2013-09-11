@@ -8,7 +8,6 @@ from django.shortcuts import redirect
 from django.core.paginator import Paginator
 
 from taggit.models import Tag
-from chartit import DataPool, Chart
 
 from .forms import EditTest
 from .forms import EditRun
@@ -57,7 +56,7 @@ def test_detail(request, pk):
     current = request.session.get('current', None)
     if current:
         current = Run.objects.get(pk=current)
-        # add test to current run if POST 
+        # add test to current run if POST
         if request.method == 'POST':
             if test not in current.tests.all():
                 TestInstance(run=current, test=test).save()
@@ -171,7 +170,7 @@ def run_detail(request, pk):
     num_page = int(request.GET.get('page', 1))
     if num_page > paginator.num_pages:
         return redirect('/run/detail/%s' % run.pk)
-    page = paginator.page(num_page)    
+    page = paginator.page(num_page)
     not_run_count = instances.filter(ended_at__isnull=True).count()
     # compute total time
     total_time = timedelta()
