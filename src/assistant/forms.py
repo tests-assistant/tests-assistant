@@ -1,12 +1,16 @@
 from django import forms
 
-
-class EditTest(forms.Form):
-    title = forms.CharField(max_length=255)
-    description = forms.CharField()
-    tags = forms.CharField(max_length=255)
+from .models import Test
+from .models import Run
 
 
-class EditRun(forms.Form):
-    title = forms.CharField(max_length=255)
-    version = forms.CharField(max_length=255)
+class EditTest(forms.ModelForm):
+	class Meta:
+		model = Test
+		fields = ('title', 'description', 'tags')
+
+
+class EditRun(forms.ModelForm):
+	class Meta:
+		model = Run
+		fields = ('title', 'version')

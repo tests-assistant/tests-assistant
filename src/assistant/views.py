@@ -6,9 +6,9 @@ from markdown import markdown
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.core.paginator import Paginator
+from django.views.decorators.http import require_POST
 
 from taggit.models import Tag
-from chartit import DataPool, Chart
 
 from .forms import EditTest
 from .forms import EditRun
@@ -32,32 +32,12 @@ def home(request):
 
 
 # Test views
-
-def test_add(request):
-    if request.method == 'POST':
-        form = EditTest(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
-            test = Test(
-                title=data['title'],
-                description=data['description'],
-                html=markdown(data['description'])
-            )
-            test.save()
-            for tag in map(lambda x: x.lower(), data['tags'].split()):
-                test.tags.add(tag)
-            return redirect('/test/detail/%s' % test.id)
-    form = EditTest()
-    ctx = dict(form=form)
-    return render(request, 'assistant/test/add.html', ctx)
-
-
 def test_detail(request, pk):
     test = Test.objects.get(pk=pk)
     current = request.session.get('current', None)
     if current:
         current = Run.objects.get(pk=current)
-        # add test to current run if POST 
+        # add test to current run if POST
         if request.method == 'POST':
             if test not in current.tests.all():
                 TestInstance(run=current, test=test).save()
@@ -67,21 +47,24 @@ def test_detail(request, pk):
 
 
 def test_edit(request, pk):
-    test = Test.objects.get(pk=pk)
+    try:
+        test_instance = Test.objects.get(pk=pk)
+    except:
+        test_instance = None
+
     if request.method == 'POST':
-        form = EditTest(request.POST)
+        form = EditTest(request.POST, instance=test_instance) if pk else EditTest(request.POST)
         if form.is_valid():
-            data = form.cleaned_data
-            test.title = data['title']
-            test.description = data['description']
-            test.html = markdown(data['description'])
+            test = form.save(commit=False)
+            test.html = markdown(form.data['description'])
             test.save()
             test.tags.clear()
-            for tag in map(lambda x: x.lower(), data['tags'].split()):
+            for tag in map(lambda x: x.lower(), form.data['tags'].split()):
                 test.tags.add(tag)
             return redirect('/test/detail/%s' % test.pk)
-    form = EditTest()
-    ctx = dict(test=test, form=form)
+
+    form = EditTest(instance=test_instance) if pk else EditTest()
+    ctx = dict(test=test_instance, form=form)
     return render(request, 'assistant/test/add.html', ctx)
 
 
@@ -146,14 +129,12 @@ def run_add(request):
     if request.method == 'POST':
         form = EditRun(request.POST)
         if form.is_valid():
-            data = form.cleaned_data
-            run = Run(
-                title=data['title'],
-                version=data['version'].lower(),
-            )
+            run = form.save(commit=False)  # solely for making version into smaller case 
+            run.version = run.version.lower()
             run.save()
             request.session['current'] = run.pk
             return redirect('/run/detail/%s' % run.pk)
+
     form = EditRun()
     ctx = dict(form=form)
     return render(request, 'assistant/run/edit.html', ctx)
@@ -171,7 +152,7 @@ def run_detail(request, pk):
     num_page = int(request.GET.get('page', 1))
     if num_page > paginator.num_pages:
         return redirect('/run/detail/%s' % run.pk)
-    page = paginator.page(num_page)    
+    page = paginator.page(num_page)
     not_run_count = instances.filter(ended_at__isnull=True).count()
     # compute total time
     total_time = timedelta()
