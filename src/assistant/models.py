@@ -18,6 +18,10 @@ class Run(models.Model):
     title = models.CharField(max_length=255)
     version = models.CharField(max_length=255)
     tests = models.ManyToManyField(Test, through='TestInstance')
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-created_on', ) 
 
 
 class TestInstance(models.Model):
