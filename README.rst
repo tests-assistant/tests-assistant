@@ -1,5 +1,6 @@
-tests-assistant
-===============
+This repo was created to submit some changes to the original repo. 
+As I'm having push permissions to original repo now, this repo wouldn't be updated anymore.
 
-:lisence: agplv3+
-:django: 1.5
+Hence, Please use original repo at [amirouche/tests-assistant](https://github.com/amirouche/tests-assistant) for all the purposes.
+
+
