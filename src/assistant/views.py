@@ -1,13 +1,13 @@
 from datetime import datetime
 from datetime import timedelta
 
-from markdown import markdown
-
-from django.shortcuts import render
-from django.shortcuts import redirect
 from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
+from django.shortcuts import render
 from django.views.decorators.http import require_POST
 
+from markdown import markdown
 from taggit.models import Tag
 
 from .forms import EditTest
@@ -33,10 +33,13 @@ def home(request):
 
 # Test views
 def test_detail(request, pk):
-    test = Test.objects.get(pk=pk)
-    current = request.session.get('current', None)
-    if current:
+    test = get_object_or_404(Test, pk=pk)
+    try:
+        current = request.session.get('current', None)
         current = Run.objects.get(pk=current)
+    except Run.DoesNotExist:
+        request.session.pop('current')
+    else:
         # add test to current run if POST
         if request.method == 'POST':
             if test not in current.tests.all():
@@ -89,9 +92,12 @@ def test_filter(request):
     for pk in pks:
         tests = tests.filter(tags__pk=pk)
     # fetch current if any and if it's POST and them to the run
-    current = request.session.get('current', None)
-    if current:
+    try:
+        current = request.session.get('current', None)
         current = Run.objects.get(pk=current)
+    except Run.DoesNotExist:
+        request.session.pop('current')
+    else:
         if request.method == 'POST':
             for test in tests:
                 if test not in current.tests.all():
