@@ -72,7 +72,7 @@ def test_edit(request, pk):
 
 
 def test_delete(request, pk):
-    test = Test.objects.get(pk=pk)
+    test = get_object_or_404(Test, pk=pk)
     if request.method == 'POST':
         test.delete()
         return redirect('/')
@@ -147,7 +147,7 @@ def run_add(request):
 
 
 def run_detail(request, pk):
-    run = Run.objects.get(pk=pk)
+    run = get_object_or_404(Run, pk=pk)
     if request.method == 'POST':
         request.session['current'] = run.pk
         redirect('/run/detail/%s' % run.pk)
@@ -169,7 +169,7 @@ def run_detail(request, pk):
 
 
 def run_run(request, pk):
-    run = Run.objects.get(pk=pk)
+    run = get_object_or_404(Run, pk=pk)
     instances = TestInstance.objects.filter(run=run)
     count = instances.count()
     not_run = instances.filter(ended_at__isnull=True)
