@@ -62,12 +62,14 @@ def test_edit(request, pk):
             test.html = markdown(form.data['description'])
             test.save()
             test.tags.clear()
-            for tag in map(lambda x: x.lower(), form.data['tags'].split()):
+            tags = set([e.lower() for e in form.data['tags'].split(',')])
+            for tag in tags:
                 test.tags.add(tag)
             return redirect('/test/detail/%s' % test.pk)
-
-    form = EditTest(instance=test_instance) if pk else EditTest()
-    ctx = dict(test=test_instance, form=form)
+    else:
+        form = EditTest(instance=test_instance) if pk else EditTest()
+    tags = Tag.objects.order_by('name')
+    ctx = dict(test=test_instance, form=form, tags=tags)
     return render(request, 'assistant/test/add.html', ctx)
 
 

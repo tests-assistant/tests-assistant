@@ -71,3 +71,25 @@ body.test-add #description {
 #result form {
     display: inline-block;
 }
+
+body.test-add div.tags ul {
+    margin: 0px;
+    padding: 0px;
+    text-align: center;
+}
+
+body.test-add div.tags ul li {
+    margin: 0px;
+    display: inline-block;
+    padding: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+    background: rgb(50, 118, 177);
+    color: white;
+    cursor: pointer;
+    margin: 2px;
+}
+
+body.test-add div.tags ul li[selected] {
+    background: green;
+}

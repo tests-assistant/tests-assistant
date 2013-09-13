@@ -3,10 +3,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tests assistant</title>
-    <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
-    <link href="{% static "css/app.css" %}" rel="stylesheet">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Tests assistant</title>
+	<link href="{% static "css/bootstrap.css" %}" rel="stylesheet" />
+	<link href="{% static "css/app.css" %}" rel="stylesheet" />
   </head>
   <body class="test-add">
     <nav class="navbar navbar-default" role="navigation">
@@ -25,7 +25,21 @@
     <script src="{% static "js/bootstrap.js" %}"></script>
     <div class="container">
       <div class="col-md-6 col-md-offset-3">
-          <form method="POST">
+        <form method="POST">
+	  {% if form.is_bound and not form.is_valid %}
+	    <div class="alert alert-danger">
+	      {% for field in form %}
+		{% if field.errors %}
+		  <p><b>{{ field.name }}</b></p>
+		  <ul>
+		    {% for error in field.errors %}
+		      <li>{{ error }}</li>
+		    {% endfor %}
+		  </ul>
+		{% endif %}
+	      {% endfor %}
+	    </div>
+	  {% endif %}
           {% csrf_token %}
           <div class="form-group">
             <input name="title" type="text" class="form-control" placeholder="Title" value="{{ test.title }}">
@@ -34,13 +48,20 @@
             <p class="help-block">This field support the <a href="http://daringfireball.net/projects/markdown/syntax">markdown syntax</a></p>
             <textarea id="description" name="description" class="form-control" placeholder="Description">{{ test.description }}</textarea>
           </div>
-          <div class="form-group">
-            <p class="help-block">Separate keywords with space. <b>Don't create new keywords unless it's needed.</b> Be carful and use the exact same orthography. Refer yourself to the full list of keywords that can be found in the <a href="/">frontpage</a>.</p>
-            <textarea name="tags" class="form-control" placeholder="Keywords">{% for tag in test.tags.names %}{{ tag }} {% endfor %}</textarea>
+	  <div class="tags">
+	    <ul>
+	      {% for tag in tags %}
+		<li {% if tag.name in test.tags.names %}selected="selected"{% endif %}>{{ tag.name }}</li>
+	      {% endfor %}
+	    </ul>
+            <input type="hidden" name="tags" value="{% for tag in test.tags.names %}{{ tag }},{% endfor %}" />
           </div>
           <button type="submit" class="btn btn-primary btn-block">Submit</button>
-          </form>
+        </form>
       </div>
     </div>
+    <!-- javascript -->
+    <script src="{% static "js/jquery.js" %}"></script>
+    <script src="{% static "js/app.js" %}"></script>
   </body>
 </html>
