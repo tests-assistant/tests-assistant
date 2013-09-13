@@ -27,7 +27,3 @@ class TestInstance(models.Model):
 
     started_at = models.DateTimeField(null=True)
     ended_at = models.DateTimeField(null=True)
-
-    @property
-    def version(self):
-        return self.run.version
