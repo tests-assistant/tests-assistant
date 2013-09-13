@@ -5,3 +5,4 @@ django-haystack==2.0.0
 whoosh==2.4
 django-nvd3
 django-concurrent-server
+unicodecsv
