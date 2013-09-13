@@ -38,7 +38,7 @@ def test_detail(request, pk):
         current = request.session.get('current', None)
         current = Run.objects.get(pk=current)
     except Run.DoesNotExist:
-        request.session.pop('current')
+        request.session.pop('current', None)
     else:
         # add test to current run if POST
         if request.method == 'POST':
