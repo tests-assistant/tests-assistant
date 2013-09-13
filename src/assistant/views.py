@@ -96,7 +96,7 @@ def test_filter(request):
         current = request.session.get('current', None)
         current = Run.objects.get(pk=current)
     except Run.DoesNotExist:
-        request.session.pop('current')
+        if 'current' in request.session: request.session.pop('current')
     else:
         if request.method == 'POST':
             for test in tests:
