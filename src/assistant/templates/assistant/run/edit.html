@@ -1,30 +1,8 @@
-{% load staticfiles %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tests assistant</title>
-    <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
-    <link href="{% static "css/app.css" %}" rel="stylesheet">
-  </head>
-  <body class="test-add">
-    <nav class="navbar navbar-default" role="navigation">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <a class="navbar-brand" href="{% url "assistant-home" %}">Tests Assistant</a>
-      </div>
+{% extends "assistant/base.html" %}
 
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse navbar-ex1-collapse">
-        <ul class="nav navbar-nav">
-	  {% include "assistant/navigation.html" %}
-        </ul>
-      </div><!-- /.navbar-collapse -->
-    </nav>
-    <script src="{% static "js/bootstrap.js" %}"></script>
-    <div class="container">
-      <div class="col-md-6 col-md-offset-3">
+{%  block container %} 
+
+<div class="col-md-6 col-md-offset-3">
 	<form method="POST">
 	  {% csrf_token %}
 	  <div class="form-group">
@@ -33,17 +11,13 @@
 	  <div class="tags">
 	    <ul>
 	      {% for tag in tags %}
-		<li {% if run.name in run.tags.names %}selected="selected"{% endif %}>{{ tag.name }}</li>
+		    <li {% if run.name in run.tags.names %}selected="selected"{% endif %}>{{ tag.name }}</li>
 	      {% endfor %}
 	    </ul>
-            <input type="hidden" name="tags" value="{% for tag in run.tags.names %}{{ tag }},{% endfor %}" />
-          </div>
+      <input type="hidden" name="tags" value="{% for tag in run.tags.names %}{{ tag }},{% endfor %}" />
+    </div>
 	  <button type="submit" class="btn btn-primary btn-block">Submit</button>
 	</form>
-      </div>
-    </div>
-    <!-- javascript -->
-    <script src="{% static "js/jquery.js" %}"></script>
-    <script src="{% static "js/app.js" %}"></script>
-  </body>
-</html>
+</div>
+
+{% endblock %}

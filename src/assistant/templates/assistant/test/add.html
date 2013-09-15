@@ -1,67 +1,46 @@
-{% load staticfiles %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Tests assistant</title>
-	<link href="{% static "css/bootstrap.css" %}" rel="stylesheet" />
-	<link href="{% static "css/app.css" %}" rel="stylesheet" />
-  </head>
-  <body class="test-add">
-    <nav class="navbar navbar-default" role="navigation">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <a class="navbar-brand" href="{% url "assistant-home" %}">Tests Assistant</a>
-      </div>
+{% extends "assistant/base.html" %}
 
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse navbar-ex1-collapse">
-        <ul class="nav navbar-nav">
-          {% include "assistant/navigation.html" %}
-        </ul>
-      </div><!-- /.navbar-collapse -->
-    </nav>
-    <script src="{% static "js/bootstrap.js" %}"></script>
-    <div class="container">
-      <div class="col-md-6 col-md-offset-3">
-        <form method="POST">
+{%  block container %} 
+
+<div class="col-md-6 col-md-offset-3">
+  <form method="POST">
 	  {% if form.is_bound and not form.is_valid %}
-	    <div class="alert alert-danger">
-	      {% for field in form %}
-		{% if field.errors %}
+    <div class="alert alert-danger">
+      {% for field in form %}
+	      {% if field.errors %}
 		  <p><b>{{ field.name }}</b></p>
 		  <ul>
 		    {% for error in field.errors %}
-		      <li>{{ error }}</li>
+	      <li>{{ error }}</li>
 		    {% endfor %}
 		  </ul>
-		{% endif %}
-	      {% endfor %}
-	    </div>
+		    {% endif %}
+      {% endfor %}
+    </div>
 	  {% endif %}
-          {% csrf_token %}
-          <div class="form-group">
-            <input name="title" type="text" class="form-control" placeholder="Title" value="{{ test.title }}">
-          </div>
-          <div class="form-group">
-            <p class="help-block">This field support the <a href="http://daringfireball.net/projects/markdown/syntax">markdown syntax</a></p>
-            <textarea id="description" name="description" class="form-control" placeholder="Description">{{ test.description }}</textarea>
-          </div>
+
+    {% csrf_token %}
+
+    <div class="form-group">
+      <input name="title" type="text" class="form-control" placeholder="Title" value="{{ test.title }}">
+    </div>
+
+    <div class="form-group">
+      <p class="help-block">This field support the <a href="http://daringfireball.net/projects/markdown/syntax">markdown syntax</a></p>
+      <textarea id="description" name="description" class="form-control" placeholder="Description">{{ test.description }}</textarea>
+    </div>
+
 	  <div class="tags">
 	    <ul>
 	      {% for tag in tags %}
-		<li {% if tag.name in test.tags.names %}selected="selected"{% endif %}>{{ tag.name }}</li>
+		    <li {% if tag.name in test.tags.names %}selected="selected"{% endif %}>{{ tag.name }}</li>
 	      {% endfor %}
 	    </ul>
-            <input type="hidden" name="tags" value="{% for tag in test.tags.names %}{{ tag }},{% endfor %}" />
-          </div>
-          <button type="submit" class="btn btn-primary btn-block">Submit</button>
-        </form>
-      </div>
+      <input type="hidden" name="tags" value="{% for tag in test.tags.names %}{{ tag }},{% endfor %}" />
     </div>
-    <!-- javascript -->
-    <script src="{% static "js/jquery.js" %}"></script>
-    <script src="{% static "js/app.js" %}"></script>
-  </body>
-</html>
+    
+    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+  </form>
+</div>
+
+{% endblock %}
