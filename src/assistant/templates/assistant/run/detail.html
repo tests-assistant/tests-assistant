@@ -8,7 +8,7 @@
     <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
     <link href="{% static "css/app.css" %}" rel="stylesheet">
   </head>
-  <body class="test-add">
+  <body class="run-detail">
     <nav class="navbar navbar-default" role="navigation">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
@@ -43,6 +43,7 @@
 		  {% if instance.ended_at == None %}TO RUN{% elif instance.success %}OK{% else %}FAIL{% endif %}
 		</button>
 		<a href="/test/detail/{{ instance.test.pk }}">{{ instance.test.title }}</a>
+		{% if instance.html %}<div class="comment">{{ instance.html|safe }}</div>{% endif %}
 	      </li>
 	    {% endfor %}
 	  </ul>

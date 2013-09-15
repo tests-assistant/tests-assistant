@@ -65,11 +65,11 @@ body.test-add #description {
 #result {
     margin-top: 10px;
     margin-bottom: 10px;
-    text-align: center;
 }
 
-#result form {
-    display: inline-block;
+#result .submit {
+    margin-top: 5px;
+    text-align: center;
 }
 
 body.test-add div.tags ul {
@@ -92,4 +92,9 @@ body.test-add div.tags ul li {
 
 body.test-add div.tags ul li[selected] {
     background: green;
+}
+
+
+body.run-detail .comment {
+    font-size: 0.7em;
 }

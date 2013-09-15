@@ -36,8 +36,13 @@
 	  {{ test.html|safe }}
 	</div>
 	<div id="result">
-	  <form method="POST">{% csrf_token %}<input type="hidden" name="flag" value="ok" /><button class="btn btn-success">OK</button></form>
-	  <form method="POST">{% csrf_token %}<input type="hidden" name="flag" value="ko" /><button class="btn btn-danger">FAIL</button></form>
+	  <form method="POST">
+	    <textarea name="comment" class="form-control" placeholder="Comment"></textarea>
+	    <div class="submit">{% csrf_token %}
+	      <button name="success" value="ok" class="btn btn-success">OK</button>
+	      <button name="success" value="ko" class="btn btn-danger">FAIL</button>
+	    </div>
+	  </form>
 	</div>
       </div>
     </div>

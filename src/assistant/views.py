@@ -180,8 +180,10 @@ def run_run(request, pk):
     if not_run_count:
         instance = not_run[0]
         if request.method == 'POST':
-            flag = request.POST['flag']
+            flag = request.POST['success']
             instance.success = flag == 'ok'
+            instance.comment = request.POST['comment']
+            instance.html = markdown(request.POST['comment'])
             instance.ended_at = datetime.now()
             instance.save()
             return redirect('/run/detail/%s/running' % run.pk)
