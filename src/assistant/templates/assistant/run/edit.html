@@ -29,11 +29,21 @@
 	  {% csrf_token %}
 	  <div class="form-group">
 	    <input name="title" type="text" class="form-control" placeholder="Title" value="{{ test.title }}">
-	    <input id="version" name="version" type="text" class="form-control" placeholder="Version" value="{{ test.version }}">
 	  </div>
+	  <div class="tags">
+	    <ul>
+	      {% for tag in tags %}
+		<li {% if run.name in run.tags.names %}selected="selected"{% endif %}>{{ tag.name }}</li>
+	      {% endfor %}
+	    </ul>
+            <input type="hidden" name="tags" value="{% for tag in run.tags.names %}{{ tag }},{% endfor %}" />
+          </div>
 	  <button type="submit" class="btn btn-primary btn-block">Submit</button>
 	</form>
       </div>
     </div>
+    <!-- javascript -->
+    <script src="{% static "js/jquery.js" %}"></script>
+    <script src="{% static "js/app.js" %}"></script>
   </body>
 </html>

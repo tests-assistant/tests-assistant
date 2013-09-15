@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.views.decorators.http import require_POST
 
 from markdown import markdown
-from taggit.models import Tag
+from taggit_machinetags.models import MachineTag as Tag
 
 from .forms import EditTest
 from .forms import EditRun
@@ -62,13 +62,13 @@ def test_edit(request, pk):
             test.html = markdown(form.data['description'])
             test.save()
             test.tags.clear()
-            tags = set([e.lower() for e in form.data['tags'].split(',')])
+            tags = set(['test:%s' % e.lower() for e in form.data['tags'].split(',')])
             for tag in tags:
                 test.tags.add(tag)
             return redirect('/test/detail/%s' % test.pk)
     else:
         form = EditTest(instance=test_instance) if pk else EditTest()
-    tags = Tag.objects.order_by('name')
+    tags = Tag.objects.filter(namespace='test').order_by('name')
     ctx = dict(test=test_instance, form=form, tags=tags)
     return render(request, 'assistant/test/add.html', ctx)
 
@@ -133,18 +133,21 @@ def run_list(request):
     return render(request, 'assistant/run/list.html', ctx)
 
 
-def run_add(request):
+def run_edit(request, pk=None):
     if request.method == 'POST':
         form = EditRun(request.POST)
         if form.is_valid():
-            run = form.save(commit=False)  # solely for making version into smaller case 
-            run.version = run.version.lower()
-            run.save()
+            run = form.save()
+            run.tags.clear()
+            tags = set(['run:%s' % e.lower() for e in form.data['tags'].split(',')])
+            for tag in tags:
+                run.tags.add(tag)
+            # set it the current run
             request.session['current'] = run.pk
             return redirect('/run/detail/%s' % run.pk)
-
     form = EditRun()
-    ctx = dict(form=form)
+    tags = Tag.objects.filter(namespace='run').order_by('name')
+    ctx = dict(form=form, tags=tags)
     return render(request, 'assistant/run/edit.html', ctx)
 
 

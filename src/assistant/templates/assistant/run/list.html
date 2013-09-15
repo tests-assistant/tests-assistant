@@ -27,7 +27,7 @@
 	<h1>{{ count }} runs</h2>
 	<ul>
 	  {% for run in page.object_list %}
-	  <li><a href="/run/detail/{{ run.pk }}">{{ run.title }} @ {{ run.version }}</a></li>
+	  <li><a href="/run/detail/{{ run.pk }}">{{ run.title }}</a></li>
 	  {% endfor %}
 	</ul>
 	<ul class="pager">

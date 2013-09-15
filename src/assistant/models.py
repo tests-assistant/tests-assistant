@@ -1,6 +1,6 @@
 from django.db import models
 
-from taggit.managers import TaggableManager
+from taggit_machinetags.managers import MachineTaggableManager
 
 
 class Test(models.Model):
@@ -8,7 +8,7 @@ class Test(models.Model):
     description = models.TextField()
     html = models.TextField()
 
-    tags = TaggableManager()
+    tags = MachineTaggableManager()
 
     def get_absolute_url(self):
         return '/test/detail/%s' % self.pk
@@ -16,9 +16,10 @@ class Test(models.Model):
 
 class Run(models.Model):
     title = models.CharField(max_length=255)
-    version = models.CharField(max_length=255)
     tests = models.ManyToManyField(Test, through='TestInstance')
     created_on = models.DateTimeField(auto_now_add=True)
+
+    tags = MachineTaggableManager()
 
     class Meta:
         ordering = ('-created_on', ) 
