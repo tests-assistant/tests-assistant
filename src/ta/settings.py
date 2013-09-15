@@ -133,6 +133,7 @@ INSTALLED_APPS = (
     'concurrent_server',
 
     'taggit',
+    'taggit_machinetags',
     'django_nvd3',
 
     'haystack',

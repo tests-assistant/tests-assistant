@@ -5,7 +5,7 @@ from .models import Run
 
 
 class EditTest(forms.ModelForm):
-	class Meta:
+        class Meta:
 		model = Test
 		fields = ('title', 'description', 'tags')
 
@@ -13,4 +13,4 @@ class EditTest(forms.ModelForm):
 class EditRun(forms.ModelForm):
 	class Meta:
 		model = Run
-		fields = ('title', 'version')
+		fields = ('title', 'tags')

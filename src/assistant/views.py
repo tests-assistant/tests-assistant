@@ -1,14 +1,14 @@
 from datetime import datetime
 from datetime import timedelta
 
-from markdown import markdown
-
-from django.shortcuts import render
-from django.shortcuts import redirect
 from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
+from django.shortcuts import render
 from django.views.decorators.http import require_POST
 
-from taggit.models import Tag
+from markdown import markdown
+from taggit_machinetags.models import MachineTag as Tag
 
 from .forms import EditTest
 from .forms import EditRun
@@ -33,10 +33,13 @@ def home(request):
 
 # Test views
 def test_detail(request, pk):
-    test = Test.objects.get(pk=pk)
-    current = request.session.get('current', None)
-    if current:
+    test = get_object_or_404(Test, pk=pk)
+    try:
+        current = request.session.get('current', None)
         current = Run.objects.get(pk=current)
+    except Run.DoesNotExist:
+        request.session.pop('current', None)
+    else:
         # add test to current run if POST
         if request.method == 'POST':
             if test not in current.tests.all():
@@ -59,17 +62,19 @@ def test_edit(request, pk):
             test.html = markdown(form.data['description'])
             test.save()
             test.tags.clear()
-            for tag in map(lambda x: x.lower(), form.data['tags'].split()):
+            tags = set(['test:%s' % e.lower() for e in form.data['tags'].split(',')])
+            for tag in tags:
                 test.tags.add(tag)
             return redirect('/test/detail/%s' % test.pk)
-
-    form = EditTest(instance=test_instance) if pk else EditTest()
-    ctx = dict(test=test_instance, form=form)
+    else:
+        form = EditTest(instance=test_instance) if pk else EditTest()
+    tags = Tag.objects.filter(namespace='test').order_by('name')
+    ctx = dict(test=test_instance, form=form, tags=tags)
     return render(request, 'assistant/test/add.html', ctx)
 
 
 def test_delete(request, pk):
-    test = Test.objects.get(pk=pk)
+    test = get_object_or_404(Test, pk=pk)
     if request.method == 'POST':
         test.delete()
         return redirect('/')
@@ -89,9 +94,12 @@ def test_filter(request):
     for pk in pks:
         tests = tests.filter(tags__pk=pk)
     # fetch current if any and if it's POST and them to the run
-    current = request.session.get('current', None)
-    if current:
+    try:
+        current = request.session.get('current', None)
         current = Run.objects.get(pk=current)
+    except Run.DoesNotExist:
+        if 'current' in request.session: request.session.pop('current')
+    else:
         if request.method == 'POST':
             for test in tests:
                 if test not in current.tests.all():
@@ -125,23 +133,26 @@ def run_list(request):
     return render(request, 'assistant/run/list.html', ctx)
 
 
-def run_add(request):
+def run_edit(request, pk=None):
     if request.method == 'POST':
         form = EditRun(request.POST)
         if form.is_valid():
-            run = form.save(commit=False)  # solely for making version into smaller case 
-            run.version = run.version.lower()
-            run.save()
+            run = form.save()
+            run.tags.clear()
+            tags = set(['run:%s' % e.lower() for e in form.data['tags'].split(',')])
+            for tag in tags:
+                run.tags.add(tag)
+            # set it the current run
             request.session['current'] = run.pk
             return redirect('/run/detail/%s' % run.pk)
-
     form = EditRun()
-    ctx = dict(form=form)
+    tags = Tag.objects.filter(namespace='run').order_by('name')
+    ctx = dict(form=form, tags=tags)
     return render(request, 'assistant/run/edit.html', ctx)
 
 
 def run_detail(request, pk):
-    run = Run.objects.get(pk=pk)
+    run = get_object_or_404(Run, pk=pk)
     if request.method == 'POST':
         request.session['current'] = run.pk
         redirect('/run/detail/%s' % run.pk)
@@ -163,7 +174,7 @@ def run_detail(request, pk):
 
 
 def run_run(request, pk):
-    run = Run.objects.get(pk=pk)
+    run = get_object_or_404(Run, pk=pk)
     instances = TestInstance.objects.filter(run=run)
     count = instances.count()
     not_run = instances.filter(ended_at__isnull=True)
@@ -172,8 +183,10 @@ def run_run(request, pk):
     if not_run_count:
         instance = not_run[0]
         if request.method == 'POST':
-            flag = request.POST['flag']
+            flag = request.POST['success']
             instance.success = flag == 'ok'
+            instance.comment = request.POST['comment']
+            instance.html = markdown(request.POST['comment'])
             instance.ended_at = datetime.now()
             instance.save()
             return redirect('/run/detail/%s/running' % run.pk)
