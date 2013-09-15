@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.urlresolvers import reverse
 
 from taggit_machinetags.managers import MachineTaggableManager
 
@@ -11,7 +12,7 @@ class Test(models.Model):
     tags = MachineTaggableManager()
 
     def get_absolute_url(self):
-        return '/test/detail/%s' % self.pk
+        return reverse('test-detail', args=(self.pk,))
 
     def last_runs(self):
         return self.run_set.order_by('-created_on')[:10]

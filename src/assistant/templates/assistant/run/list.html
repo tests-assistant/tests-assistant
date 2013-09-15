@@ -12,7 +12,7 @@
     <nav class="navbar navbar-default" role="navigation">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
-        <a class="navbar-brand" href="/">Tests Assistant</a>
+        <a class="navbar-brand" href="{% url "assistant-home" %}">Tests Assistant</a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
@@ -27,15 +27,15 @@
 	<h1>{{ count }} runs</h2>
 	<ul>
 	  {% for run in page.object_list %}
-	  <li><a href="/run/detail/{{ run.pk }}">{{ run.title }}</a></li>
+	  <li><a href="{% url "run-detail" run.pk %}">{{ run.title }}</a></li>
 	  {% endfor %}
 	</ul>
 	<ul class="pager">
 	  {% if page.has_previous %}
-	  <li><a href="/run/list?page={{ page.previous_page_number }}">Previous</a></li>
+	  <li><a href="{% url "run-list" %}?page={{ page.previous_page_number }}">Previous</a></li>
 	  {% endif %}
 	  {% if page.has_next %}
-	  <li><a href="/run/list?page={{ page.next_page_number }}">Next</a></li>
+	  <li><a href="{% url "run-list" %}?page={{ page.next_page_number }}">Next</a></li>
 	  {% endif %}
 	</ul>
       </div>

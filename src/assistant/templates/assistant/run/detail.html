@@ -12,7 +12,7 @@
     <nav class="navbar navbar-default" role="navigation">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
-        <a class="navbar-brand" href="/">Tests Assistant</a>
+        <a class="navbar-brand" href="{% url "assistant-home" %}">Tests Assistant</a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
@@ -33,9 +33,9 @@
         </div>
 	{% if not_run_count %}
 	  {% if not_run_count == count %}
-	    <a href="/run/detail/{{ run.pk }}/running"><button class="btn btn-success btn-block">Run this tests</button></a>
+	    <a href="{% url "run-running" run.pk %}"><button class="btn btn-success btn-block">Run this tests</button></a>
 	  {% else %}
-	    <a href="/run/detail/{{ run.pk }}/running"><button class="btn btn-success btn-block">Finish this run</button></a>
+	    <a href="{% url "run-running" run.pk %}"><button class="btn btn-success btn-block">Finish this run</button></a>
 	  {% endif %}
 	{% endif %}
 	{% if count %}
@@ -46,7 +46,7 @@
 		<button class="btn btn-xs {% if instance.ended_at == None %}btn-default{% elif instance.success %}btn-success{% else %}btn-danger{% endif %}">
 		  {% if instance.ended_at == None %}TO RUN{% elif instance.success %}OK{% else %}FAIL{% endif %}
 		</button>
-		<a href="/test/detail/{{ instance.test.pk }}">{{ instance.test.title }}</a>
+		<a href="{% url "test-detail" instance.test.pk %}">{{ instance.test.title }}</a>
 		{% if instance.html %}<div class="comment">{{ instance.html|safe }}</div>{% endif %}
 	      </li>
 	    {% endfor %}

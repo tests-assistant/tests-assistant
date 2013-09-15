@@ -12,7 +12,7 @@
     <nav class="navbar navbar-default" role="navigation">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
-        <a class="navbar-brand" href="/">Tests Assistant</a>
+        <a class="navbar-brand" href="{% url "assistant-home" %}">Tests Assistant</a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
@@ -27,7 +27,7 @@
 	<h1>Keywords <small>Select a keyword to filter with</small></h1>
 	<div class="tags">
 	  {% for tag in tags %}
-	  <a href="/test/filter?tags={{ tag.pk }}" class="label label-primary"><span class="glyphicon glyphicon-plus"></span> {{ tag.name }}</a>
+	  <a href="{% url "test-filter" %}?tags={{ tag.pk }}" class="label label-primary"><span class="glyphicon glyphicon-plus"></span> {{ tag.name }}</a>
 	  {% endfor %}
 	</div>	
       </div>
@@ -35,7 +35,7 @@
 	<h1>{{ count }} tests</h1>
 	<ul>
 	  {% for test in tests %}
-	  <li><a href="/test/detail/{{ test.pk }}">{{ test.title }}</a></li>
+	  <li><a href="{% url "test-detail" test.pk %}">{{ test.title }}</a></li>
 	  {% endfor %}
 	</ul>
 	<ul class="pager">
