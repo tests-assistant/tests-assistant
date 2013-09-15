@@ -41,6 +41,16 @@
           </form>
           {% endif %}
       </div>
+      <div class="col-md-3">
+	<h2>Last runs</h2>
+	<ul>
+	    {% for run in test.last_runs %}
+	      <li><a href="{% url "run-detail" run.pk %}">{{ run.title }} {% for tag in run.tags.names %}</a><span class="label label-success">{{ tag }}</span>
+          {% endfor %}
+	      </li>
+	    {% endfor %}
+	</ul>
+      </div>
     </div>
   </body>
 </html>

@@ -13,6 +13,9 @@ class Test(models.Model):
     def get_absolute_url(self):
         return '/test/detail/%s' % self.pk
 
+    def last_runs(self):
+        return self.run_set.order_by('-created_on')[:10]
+
 
 class Run(models.Model):
     title = models.CharField(max_length=255)
