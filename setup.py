@@ -4,7 +4,7 @@ from setuptools import find_packages
 
 setup(
     name='django-tests-assistant',
-    version='1.0.0',
+    version='0.1.0',
     description= 'A tool to help keep track of tests, specially for you - developer.',
     license='(AGPL v3+) GNU AFFERO GENERAL PUBLIC LICENSE Version 3 or later',
     url='https://github.com/tests-assistant/tests-assistant/',
@@ -12,10 +12,10 @@ setup(
     author_email='amirouche.boubekki@gmail.com',
     maintainer=u'Arun Karunagath',
     maintainer_email='the1.arun@gmail.com',
-    packages=find_packages('src'),
+    packages=find_packages(),
     long_description=open('README.rst').read(),
-    include_package_data=True,
     install_requires=open('requirements.txt').readlines(),
+    include_package_data=True,
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
