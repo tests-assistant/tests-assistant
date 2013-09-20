@@ -3,7 +3,7 @@ from distutils.core import setup
 from setuptools import find_packages
 
 setup(
-    name='django-test-assistant',
+    name='django-tests-assistant',
     version='1.0.0',
     description= 'A tool to help keep track of tests, specially for you - developer.',
     license='(AGPL v3+) GNU AFFERO GENERAL PUBLIC LICENSE Version 3 or later',
