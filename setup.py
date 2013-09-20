@@ -12,9 +12,10 @@ setup(
     author_email='amirouche.boubekki@gmail.com',
     maintainer=u'Arun Karunagath',
     maintainer_email='the1.arun@gmail.com',
-    packages=find_packages(),
+    packages=find_packages('src'),
     long_description=open('README.rst').read(),
     include_package_data=True,
+    install_requires=open('requirements.txt').readlines(),
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
