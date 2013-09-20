@@ -1,0 +1,77 @@
+{% extends "assistant/base.html" %}
+
+{%  block container %} 
+
+<div class="col-md-6 col-md-offset-3">
+	<h1>{{ run.title }}</h1>
+  
+  <div class="tags">
+	  {% for tag in run.tags.names %}
+	    <span class="label label-success">{{ tag }}</span>
+	  {% endfor %}
+	</div>
+
+	{% if not_run_count %}
+	  {% if not_run_count == count %}
+  <a href="{% url "run-running" run.pk %}"><button class="btn btn-success btn-block">Run this tests</button></a>
+	  {% else %}
+  <a href="{% url "run-running" run.pk %}"><button class="btn btn-success btn-block">Finish this run</button></a>
+	  {% endif %}
+	{% endif %}
+
+	{% if count %}
+  <h1>{{ count }} tests in {{ total_time}}</h1>
+  <ul>
+    {% for instance in page.object_list %}
+    <li>
+			<button class="btn btn-xs {% if instance.ended_at == None %}btn-default{% elif instance.success %}btn-success{% else %}btn-danger{% endif %}">
+		  	{% if instance.ended_at == None %}TO RUN{% elif instance.success %}OK{% else %}FAIL{% endif %}
+			</button>
+			<a href="{% url "test-detail" instance.test.pk %}">{{ instance.test.title }}</a>
+			{% if instance.html %}
+			<div class="comment">{{ instance.html|safe }}</div>
+			{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+	  
+	<ul class="pager">
+    {% if page.has_previous %}
+    <li><a href="?page={{ page.previous_page_number }}">Previous</a></li>
+    {% endif %}
+    {% if page.has_next %}
+    <li><a href="?page={{ page.next_page_number }}">Next</a></li>
+    {% endif %}
+  </ul>
+
+	{% else %}
+
+  <p>There is no tests in this run</p>
+
+	  {% if current == run.pk %}
+
+  <p>This run is current you add tests in bulk with <a href="/">keywords</a> or use <a href="/search">search</a> and pick them one by one.</p>
+
+	  {% elif current == None %}
+
+  <p>Set this run current with the button below, to be able to add it tests.</p>
+  <form method="POST">
+    {% csrf_token %}
+    <button class="btn btn-block btn-lg btn-success">Set this run current</button>
+  </form>
+
+	  {% else %}
+
+  <p>This run is not current click the button below to make it current</p>
+  <form method="POST">
+    {% csrf_token %}
+    <button class="btn btn-block btn-lg btn-success">Set this run current</button>
+  </form>
+
+	  {% endif %}
+
+	{% endif %}
+
+</div>
+
+{% endblock %}

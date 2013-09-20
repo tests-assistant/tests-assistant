@@ -1,0 +1,30 @@
+{% extends "assistant/base.html" %}
+
+{%  block container %} 
+
+<div class="col-md-6 col-md-offset-3">
+	<h1><b>{{ done }}/{{ count }}</b> @ {{ run.title }}</h1>
+	<h2>{{ test.title }}</h2>
+
+	<div class="tags">
+	  {% for tag in test.tags.names %}
+    <span class="label label-success">{{ tag }}</span>
+	  {% endfor %}
+	</div>
+
+	<div class="description">
+	  {{ test.html|safe }}
+	</div>
+
+	<div id="result">
+	  <form method="POST">
+	    <textarea name="comment" class="form-control" placeholder="Comment"></textarea>
+	    <div class="submit">{% csrf_token %}
+	      <button name="success" value="ok" class="btn btn-success">OK</button>
+	      <button name="success" value="ko" class="btn btn-danger">FAIL</button>
+	    </div>
+	  </form>
+	</div>
+</div>
+
+{% endblock %}

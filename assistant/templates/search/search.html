@@ -1,0 +1,63 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Tests assistant</title>
+	<link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
+	  <link href="{% static "css/app.css" %}" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="navbar navbar-default" role="navigation">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <a class="navbar-brand" href="{% url "assistant-home" %}">Tests Assistant</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav">
+	  {% include "assistant/navigation.html" %}
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </nav>
+    <div class="container">
+      <div class="col-md-6 col-md-offset-3">
+	<h2>Search</h2>
+
+	<form method="get" action=".">
+	  <input name="q" type="text" class="form-control" placeholder="Query" value="{% if form.q.value %}{{ form.q.value }}{% endif %}" />
+
+          {% if query %}
+	    {% if page.object_list %}
+              <h3>Results</h3>
+
+	      <ul>
+		{% for result in page.object_list %}
+		  <li>
+                    <a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a>
+		  </li>
+		{% endfor %}
+	      </ul>
+	      
+              {% if page.has_previous or page.has_next %}
+		<div>
+                  {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
+                  |
+                  {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
+		</div>
+            {% else %}
+              {# Show some example queries to run, maybe query syntax, something else? #}
+            {% endif %}
+
+	    {% else %}
+	      <h3>No results</h3>
+            {% endif %}
+	  {% endif %}
+	</form>
+      </div>
+    </div>
+    <script src="{% static "js/bootstrap.js" %}"></script>
+  </body>
+</html>

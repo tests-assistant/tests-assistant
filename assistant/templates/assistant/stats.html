@@ -1,0 +1,39 @@
+{% load staticfiles %}
+{% load nvd3_tags %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tests assistant</title>
+        <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
+        <link href="{% static "css/app.css" %}" rel="stylesheet">
+        {% include_nvd3jscss %}
+        {% load_chart charttype chartdata "piechart_container" %}
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{% url "assistant-home" %}">Tests Assistant</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    {% include "assistant/navigation.html" %}
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </nav>
+        <div class="container">
+            <h1>Stats</h1>
+            {% include_container "piechart_container" 700 900 %}
+            <ul>
+                {% for index, name in match %}
+                <li>{{ index }} is {{ name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <script src="{% static "js/bootstrap.js" %}"></script>
+    </body>
+</html>

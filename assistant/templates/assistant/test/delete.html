@@ -1,0 +1,22 @@
+{% extends "assistant/base.html" %}
+
+{%  block container %} 
+
+<div class="col-md-6 col-md-offset-3">
+	<h1>{{ test.title }}</h1>
+	<div class="tags">
+    {% for tag in test.tags.names %}
+    <span class="label label-success">{{ tag }}</span>
+    {% endfor %}
+  </div>
+
+  <div class="description">
+    {{ test.html|safe }}
+	  <form method="POST">
+	    {% csrf_token %}
+	    <button class="btn btn-lg btn-block btn-danger">I really want to delete this test</button>
+	  </form>
+  </div>
+</div>
+
+{% endblock %}

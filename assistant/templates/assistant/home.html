@@ -1,0 +1,34 @@
+{% extends "assistant/base.html" %}
+
+{%  block container %} 
+
+<div class="col-md-6 col-md-offset-3">
+	<h1>Keywords <small>Select a keyword to filter with</small></h1>
+
+	<div class="tags">
+	  {% for tag in tags %}
+	  <a href="{% url "test-filter" %}?tags={{ tag.pk }}" class="label label-primary"><span class="glyphicon glyphicon-plus"></span> {{ tag.name }}</a>
+	  {% endfor %}
+	</div>	
+</div>
+
+<div class="col-md-6 col-md-offset-3">
+	<h1>{{ count }} tests</h1>
+
+	<ul>
+	  {% for test in tests %}
+	  <li><a href="{% url "test-detail" test.pk %}">{{ test.title }}</a></li>
+	  {% endfor %}
+	</ul>
+
+	<ul class="pager">
+	  {% if page.has_previous %}
+	  <li><a href="?page={{ page.previous_page_number }}">Previous</a></li>
+	  {% endif %}
+	  {% if page.has_next %}
+	  <li><a href="?page={{ page.next_page_number }}">Next</a></li>
+	  {% endif %}
+	</ul>
+</div>
+
+{% endblock %}

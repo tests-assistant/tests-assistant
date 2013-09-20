@@ -1,0 +1,42 @@
+{% extends "assistant/base.html" %}
+
+{%  block container %} 
+
+<div class="col-md-6 col-md-offset-3">
+	<h1>Keywords <small>Further filter tests</small></h1>
+
+	<div class="tags">
+	  {% for current_tag in all_tags %}
+      {% if current_tag in tags %}
+    <span class="label label-success">{{ current_tag.name }}</span>
+      {% else %}
+    <a href="?tags={% for tag in tags %}{{ tag.pk }},{% endfor %}{{ current_tag.pk }}" class="label label-primary"><span class="glyphicon glyphicon-plus"></span> {{ current_tag.name }}</a>
+      {% endif %}
+	  {% endfor %}
+	</div>
+</div>
+
+<div class="col-md-6 col-md-offset-3">
+	<h1>{{ count }} tests match</h1>
+	{% if current %}
+	<form method="POST" id="add-this">
+    {% csrf_token %}
+    <button class="btn btn-block btn-default">Add all this tests to the current run</button>
+  </form>
+	{% endif %}
+	<ul>
+    {% for test in tests %}
+    <li><a href="{% url "test-detail" test.pk %}">{{ test.title }}</a></li>
+    {% endfor %}
+	</ul>
+	<ul class="pager">
+    {% if page.has_previous %}
+    <li><a href="?tags={% for tag in tags %}{{ tag.pk }},{% endfor %}&page={{ page.previous_page_number }}">Previous</a></li>
+    {% endif %}
+    {% if page.has_next %}
+    <li><a href="?tags={% for tag in tags %}{{ tag.pk }},{% endfor %}&page={{ page.next_page_number }}">Next</a></li>
+    {% endif %}
+	</ul>
+</div>
+
+{% endblock %}

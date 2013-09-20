@@ -1,0 +1,22 @@
+{% extends "assistant/base.html" %}
+
+{%  block container %} 
+
+<div class="col-md-6 col-md-offset-3">
+	<h1>{{ count }} runs</h2>
+	<ul>
+	  {% for run in page.object_list %}
+	  <li><a href="{% url "run-detail" run.pk %}">{{ run.title }}</a></li>
+	  {% endfor %}
+	</ul>
+	<ul class="pager">
+	  {% if page.has_previous %}
+	  <li><a href="{% url "run-list" %}?page={{ page.previous_page_number }}">Previous</a></li>
+	  {% endif %}
+	  {% if page.has_next %}
+	  <li><a href="{% url "run-list" %}?page={{ page.next_page_number }}">Next</a></li>
+	  {% endif %}
+	</ul>
+</div>
+    
+{% endblock %}
