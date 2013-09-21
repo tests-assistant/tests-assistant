@@ -4,7 +4,7 @@ from setuptools import find_packages
 
 setup(
     name='django-tests-assistant',
-    version='0.1.2',
+    version='0.2.0',
     description= 'A tool to help keep track of tests, specially for you - developer.',
     license='(AGPL v3+) GNU AFFERO GENERAL PUBLIC LICENSE Version 3 or later',
     url='https://github.com/tests-assistant/tests-assistant/',
