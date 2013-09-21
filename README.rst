@@ -23,4 +23,5 @@ Edit your urls.py and add followingi in your urlpatterns:
 
 ``url(r'^', include('assistant.urls')),``
 
-That is it & enjoy :)
+That is it & enjoy :) 
+Oh, don't forget to do a ``python manage.py syncdb``
