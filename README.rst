@@ -16,13 +16,17 @@ Install django-tests-assistant from pypi::
 
   pip install django-tests-assistant
 
-Edit settings.py of your project and add::
+Give path to the search indexes::
+
+  TEST_ASSISTANT_WHOOSH_PATH = "/path/to/whoosh/index/directory"
+
+Edit settings.py of your project and add following at the end::
 
   from assistant.settings import *
 
-Edit your urls.py and add followingi in your urlpatterns::
+Edit your urls.py and add a url mapping in your urlpatterns::
 
-  url(r'^', include('assistant.urls')),
+  url(r'tests/', include('assistant.urls')),
 
 That is it & enjoy :) 
 
