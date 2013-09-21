@@ -72,13 +72,13 @@ body.test-add #description {
     text-align: center;
 }
 
-body.test-add div.tags ul {
+div.tags ul {
     margin: 0px;
     padding: 0px;
     text-align: center;
 }
 
-body.test-add div.tags ul li {
+div.tags ul li {
     margin: 0px;
     display: inline-block;
     padding: 5px;
@@ -90,7 +90,7 @@ body.test-add div.tags ul li {
     margin: 2px;
 }
 
-body.test-add div.tags ul li[selected] {
+div.tags ul li[selected] {
     background: green;
 }
 

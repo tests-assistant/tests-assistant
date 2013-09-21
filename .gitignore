@@ -3,6 +3,7 @@
 src/db.sqlite
 whoosh_index/
 backup/
+example/db.sqlite
 
 # C extensions
 *.so
