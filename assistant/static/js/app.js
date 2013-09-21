@@ -1,8 +1,8 @@
 var tagselect = function() {
-    var input = $('body.test-add .tags input[name="tags"]');
-    var tags = $('body.test-add .tags ul > li');
-    var widget = $('body.test-add .tags ul');
-
+    var input = $('.tags input[name="tags"]');
+    var tags = $('.tags ul > li');
+    var widget = $('.tags ul');
+    
     var tag_on_click = function(index, event) {
 	var val = input.val();
 	var element = $(this);
@@ -31,7 +31,7 @@ var tagselect = function() {
     var newtag = $('<li class="add-tag"><span class="glyphicon glyphicon-edit"></span> New tag</li>');
     var newtag_on_click = function() {
 	$(this).remove()
-	var newinput = $('<li><form><input type="text"/><input type="submit" value="Add"/><form><li>');
+	var newinput = $('<li><form><input type="text"/><input type="submit" value="Add"/><form></li>');
 	newinput.submit(function(event) {
 	    var tag = $('input[type="text"]', newinput).val();
 	    newinput.remove();
@@ -41,7 +41,6 @@ var tagselect = function() {
 	    tag_on_click.call(tag);
 	    widget.append(newtag);
 	    newtag.click(newtag_on_click);
-
 	});
 	widget.append(newinput);
     };
