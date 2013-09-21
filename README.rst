@@ -3,6 +3,7 @@ tests-assistant
 
 :lisence: agplv3+
 :django: 1.5
+:pypi: https://pypi.python.org/pypi/django-tests-assistant
 
 
 Install
