@@ -24,7 +24,7 @@ def home(request):
     paginator = Paginator(Test.objects.all().order_by('title'), 30)
     num_page = int(request.GET.get('page', 1))
     if num_page > paginator.num_pages:
-        return redirect('/')
+        return redirect('assistant-home')
     page = paginator.page(num_page)
     tags = Test.tags.all().order_by('name')
     ctx = dict(page=page, tests=page.object_list, tags=tags, count=count)
@@ -44,7 +44,7 @@ def test_detail(request, pk):
         if request.method == 'POST':
             if test not in current.tests.all():
                 TestInstance(run=current, test=test).save()
-            return redirect('/run/detail/%s' % current.pk)
+            return redirect('run-detail', current.pk)
     ctx = dict(test=test, current=current)
     return render(request, 'assistant/test/detail.html', ctx)
 
@@ -65,7 +65,7 @@ def test_edit(request, pk):
             tags = set(['test:%s' % e.lower() for e in form.data['tags'].split(',')])
             for tag in tags:
                 test.tags.add(tag)
-            return redirect('/test/detail/%s' % test.pk)
+            return redirect('test-detail', test.pk)
     else:
         form = EditTest(instance=test_instance) if pk else EditTest()
     tags = Tag.objects.filter(namespace='test').order_by('name')
@@ -77,7 +77,7 @@ def test_delete(request, pk):
     test = get_object_or_404(Test, pk=pk)
     if request.method == 'POST':
         test.delete()
-        return redirect('/')
+        return redirect('assistant-home')
     ctx = dict(test=test)
     return render(request, 'assistant/test/delete.html', ctx)
 
@@ -85,7 +85,7 @@ def test_delete(request, pk):
 def test_filter(request):
     pks = request.GET.get('tags', None)
     if not pks:
-        return redirect('/')
+        return redirect('assistant-home')
     all_tags = Test.tags.all().order_by('name')
     pks = map(int, [e for e in pks.split(',') if e])
     tags = map(lambda x: Tag.objects.get(pk=x), pks)
@@ -104,13 +104,13 @@ def test_filter(request):
             for test in tests:
                 if test not in current.tests.all():
                     TestInstance(run=current, test=test).save()
-            return redirect('/run/detail/%s' % current.pk)
+            return redirect('run-detail', current.pk)
 
     count = tests.count()
     paginator = Paginator(tests, 30)
     num_page = int(request.GET.get('page', 1))
     if num_page > paginator.num_pages:
-        return redirect('/')
+        return redirect('assistant-home')
     page = paginator.page(num_page)
     tests = page.object_list
 
@@ -127,7 +127,7 @@ def run_list(request):
     paginator = Paginator(runs, 30)
     num_page = int(request.GET.get('page', 1))
     if num_page > paginator.num_pages:
-        return redirect('/run/list')
+        return redirect('run-list')
     page = paginator.page(num_page)
     ctx = dict(page=page, count=count)
     return render(request, 'assistant/run/list.html', ctx)
@@ -144,7 +144,7 @@ def run_edit(request, pk=None):
                 run.tags.add(tag)
             # set it the current run
             request.session['current'] = run.pk
-            return redirect('/run/detail/%s' % run.pk)
+            return redirect('run-detail', run.pk)
     form = EditRun()
     tags = Tag.objects.filter(namespace='run').order_by('name')
     ctx = dict(form=form, tags=tags)
@@ -155,14 +155,14 @@ def run_detail(request, pk):
     run = get_object_or_404(Run, pk=pk)
     if request.method == 'POST':
         request.session['current'] = run.pk
-        redirect('/run/detail/%s' % run.pk)
+        redirect('run-detail', run.pk)
     current = request.session.get('current', None)
     instances = TestInstance.objects.filter(run=run)
     count = instances.count()
     paginator = Paginator(instances, 30)
     num_page = int(request.GET.get('page', 1))
     if num_page > paginator.num_pages:
-        return redirect('/run/detail/%s' % run.pk)
+        return redirect('run-detail', run.pk)
     page = paginator.page(num_page)
     not_run_count = instances.filter(ended_at__isnull=True).count()
     # compute total time
@@ -189,9 +189,9 @@ def run_run(request, pk):
             instance.html = markdown(request.POST['comment'])
             instance.ended_at = datetime.now()
             instance.save()
-            return redirect('/run/detail/%s/running' % run.pk)
+            return redirect('run-running', run.pk)
     else:
-        return redirect('/run/detail/%s' % run.pk)
+        return redirect('run-detail', run.pk)
     instance.started_at = datetime.now()
     instance.save()
     test = instance.test
