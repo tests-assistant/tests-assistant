@@ -37,3 +37,9 @@ Edit your urls.py and add a url mapping in your urlpatterns::
 That is it & enjoy :) 
 
 Oh, don't forget to do a ``python manage.py syncdb``
+
+
+.. image:: https://d2weczhvl823v0.cloudfront.net/tests-assistant/tests-assistant/trend.png
+   :alt: Bitdeli badge
+   :target: https://bitdeli.com/free
+
