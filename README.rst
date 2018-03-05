@@ -5,10 +5,10 @@ tests-assistant
 :django: 1.5
 :pypi: https://pypi.python.org/pypi/django-tests-assistant
 
-.. image:: https://pypip.in/v/django-tests-assistant/badge.png
+.. image:: https://img.shields.io/pypi/v/django-tests-assistant.svg
     :alt: Version
     :target: https://crate.io/packages/django-tests-assistant/
-.. image:: https://pypip.in/d/django-tests-assistant/badge.png
+.. image:: https://img.shields.io/pypi/dm/django-tests-assistant.svg
     :alt: Downloads
     :target: https://crate.io/packages/django-tests-assistant/
 
